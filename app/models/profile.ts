@@ -21,7 +21,7 @@ export default class Profile extends BaseModel {
   declare updatedAt: DateTime
   
   @column()
-  declare user_id: string
+  declare userId: string
 
   @belongsTo(()=> User)
   declare user: BelongsTo<typeof User>

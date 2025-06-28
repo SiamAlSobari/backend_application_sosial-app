@@ -14,8 +14,15 @@ export default class AuthController {
             password: payload.password
         })
         await user.related('profile').create({
-            name: payload.name
+            name: payload.name,
         })
+        response.status(200).json(user)
+    }
+
+    public async login({request,response,auth}:HttpContext) {
+        const payload = await request.validateUsing(registerValidator)
+        const user = await User.verifyCredentials(payload.email,payload.password)
+        const token = await auth.use('web').login(user)
         return user
     }
 }
