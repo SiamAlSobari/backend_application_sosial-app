@@ -1,5 +1,5 @@
 import User from '#models/user'
-import { registerValidator } from '#validators/auth'
+import { loginValidator, registerValidator } from '#validators/auth'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
@@ -16,13 +16,26 @@ export default class AuthController {
         await user.related('profile').create({
             name: payload.name,
         })
-        response.status(200).json(user)
+        response.status(201).json({
+            message: 'User created successfully',
+            data: user
+        })
     }
 
     public async login({request,response,auth}:HttpContext) {
-        const payload = await request.validateUsing(registerValidator)
+        const payload = await request.validateUsing(loginValidator)
         const user = await User.verifyCredentials(payload.email,payload.password)
-        const token = await auth.use('web').login(user)
-        return user
+        await auth.use('web').login(user)
+        response.status(200).json({
+            message: 'User logged in successfully',
+            data: user
+        })
+    }
+
+    public async logout({auth,response}:HttpContext) {
+        await auth.use('web').logout()
+        response.status(200).json({
+            message: 'User logged out successfully',
+        })
     }
 }
