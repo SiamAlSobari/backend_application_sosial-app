@@ -1,35 +1,45 @@
 import User from '#models/user'
+import { AuthService } from '#services/auth_service'
 import { loginValidator, registerValidator } from '#validators/auth'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class AuthController {
+    constructor(
+        private readonly authService:AuthService
+    ) {}
+
     public async register({request,response}:HttpContext) {
         const payload = await request.validateUsing(registerValidator)
-        const existingUser = await User.findBy('email',payload.email)
-        if (existingUser) {
-            return response.badRequest('Email already exists')
+        try {
+            const user = await this.authService.register(payload)
+            response.status(201).json({
+                message: 'User registered successfully',
+                data: user
+            })
+        } catch (error) {
+            response.badRequest({
+                message: error.message
+            })
         }
-        const user = await User.create({
-            email: payload.email,
-            password: payload.password
-        })
-        await user.related('profile').create({
-            name: payload.name,
-        })
-        response.status(201).json({
-            message: 'User created successfully',
-            data: user
-        })
     }
 
     public async login({request,response,auth}:HttpContext) {
         const payload = await request.validateUsing(loginValidator)
-        const user = await User.verifyCredentials(payload.email,payload.password)
-        await auth.use('web').login(user)
-        response.status(200).json({
-            message: 'User logged in successfully',
-            data: user
-        })
+        try {
+            const user = await this.authService.login(payload)
+            await auth.use('web').login(user)
+            response.status(200).json({
+                message: 'User logged in successfully',
+                data: user
+            })
+        } catch (error) {
+            response.badRequest({
+                message: error.message
+            })
+        }
+
     }
 
     public async logout({auth,response}:HttpContext) {
