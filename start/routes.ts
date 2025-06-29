@@ -46,13 +46,14 @@ router.group(() => {
   // post route
   router.group(() => {
     router.post('/', [PostsController, 'createPost']).use(middleware.auth())
+    router.get('/', [PostsController, 'getPosts'])
   }).prefix('posts')
 
   // media route
   router.group(() => {
     router.delete('/:id', [MediaController, 'deleteMedia']).use(middleware.auth())
   }).prefix('media')
-  
+
 }).prefix('api/v1')
 
 
