@@ -8,3 +8,12 @@ export const updateAvatarProfileValidator = vine.compile(
         })
     })
 )
+
+export const updateBannerProfileValidator = vine.compile(
+    vine.object({
+        banner:vine.file({
+            size: '10mb',
+            extnames: ['jpg', 'png', 'jpeg', 'webp']
+        })
+    })
+)
