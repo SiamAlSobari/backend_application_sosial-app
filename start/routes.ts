@@ -13,6 +13,7 @@ import { middleware } from './kernel.js'
 import ProfilesController from '#controllers/profiles_controller'
 import path, { normalize } from 'path'
 import app from '@adonisjs/core/services/app'
+import PostsController from '#controllers/posts_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -39,7 +40,12 @@ router.group(() => {
     router.get('/', [ProfilesController, 'getProfile']).use(middleware.auth())
     router.patch('/avatar', [ProfilesController, 'updateAvatarProfile']).use(middleware.auth())
     router.patch('/banner', [ProfilesController, 'updateBannerProfile']).use(middleware.auth())
-  }).prefix('profile')
+  }).prefix('profiles')
+
+  // post route
+  router.group(() => {
+    router.post('/', [PostsController, 'createPost']).use(middleware.auth())
+  }).prefix('posts')
   
 
 }).prefix('api/v1')

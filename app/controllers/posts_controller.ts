@@ -1,11 +1,7 @@
-import { getBaseUrl } from '#config/filename'
-import Post from '#models/post'
 import { PostService } from '#services/post_service'
 import { createPostValidator } from '#validators/post'
 import { inject } from '@adonisjs/core'
-import { cuid } from '@adonisjs/core/helpers'
 import type { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
 
 @inject()
 export default class PostsController {
@@ -13,12 +9,17 @@ export default class PostsController {
         private readonly postService: PostService
     ) {}
 
-    public async createPost({request,response,auth}: HttpContext) {
+    public async createPost({request,auth,response}: HttpContext) {
         const payload = await request.validateUsing(createPostValidator)
+        if (!payload.caption && (!payload.media || payload.media.length === 0)) {
+            response.badRequest({
+                message: 'Caption or media is required'
+            })
+        }
         const post = await this.postService.createPostWithMedia(
             auth.user!.id,
-            payload.caption,
-            payload.media,
+            payload.caption || '',
+            payload.media || [],
             request
         )
         return post
