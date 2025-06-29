@@ -20,7 +20,7 @@ export default class ProfilesController {
         })
     }
 
-    public async updateAvatarProfile({request,auth}:HttpContext){
+    public async updateAvatarProfile({request,auth,response}:HttpContext){
         const {avatar} = await request.validateUsing(updateAvatarProfileValidator)
         const profile = await this.profilesService.getProfileByUserId(auth.user!.id)
         await avatar.move(app.makePath('storage/uploads/avatars'),{
@@ -28,10 +28,13 @@ export default class ProfilesController {
         })
         profile.avatar_image = `${getBaseUrl(request)}/uploads/avatars/${avatar.fileName}`
         await profile.save()
-        return profile
+        response.status(200).json({
+            message: 'Profile updated successfully',
+            data: profile
+        })
     }
 
-    public async updateBannerProfile({request,auth}:HttpContext){
+    public async updateBannerProfile({request,auth,response}:HttpContext){
         const {banner} = await request.validateUsing(updateBannerProfileValidator)
         const profile = await this.profilesService.getProfileByUserId(auth.user!.id)
         await banner.move(app.makePath('storage/uploads/banners'),{
@@ -39,6 +42,9 @@ export default class ProfilesController {
         })
         profile.banner_image = `${getBaseUrl(request)}/uploads/banners/${banner.fileName}`
         await profile.save()
-        return profile
+        response.status(200).json({
+            message: 'Profile updated successfully',
+            data: profile
+        })
     }
 }

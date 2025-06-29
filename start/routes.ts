@@ -14,6 +14,7 @@ import ProfilesController from '#controllers/profiles_controller'
 import path, { normalize } from 'path'
 import app from '@adonisjs/core/services/app'
 import PostsController from '#controllers/posts_controller'
+import MediaController from '#controllers/media_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -46,8 +47,12 @@ router.group(() => {
   router.group(() => {
     router.post('/', [PostsController, 'createPost']).use(middleware.auth())
   }).prefix('posts')
-  
 
+  // media route
+  router.group(() => {
+    router.delete('/:id', [MediaController, 'deleteMedia']).use(middleware.auth())
+  }).prefix('media')
+  
 }).prefix('api/v1')
 
 
