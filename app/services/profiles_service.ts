@@ -5,7 +5,6 @@ import { inject } from "@adonisjs/core";
 export class ProfilesService {
 
     public async getProfileByUserId(userId: string) {
-        const profile = await Profile.query().where('user_id',userId).firstOrFail()
-        return profile
+        return await Profile.query().where('user_id',userId).firstOrFail()
     }
 }

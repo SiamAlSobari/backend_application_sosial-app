@@ -14,6 +14,7 @@ export default class extends BaseSchema {
       table.string('kota').nullable()
       table.string('pekerjaan').nullable()
       table.string('website').nullable()
+      table.boolean('is_private').notNullable().defaultTo(false)
       table.string('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
 
       table.timestamp('created_at')

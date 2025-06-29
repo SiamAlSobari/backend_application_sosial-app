@@ -32,6 +32,9 @@ export default class Profile extends BaseModel {
   @column()
   declare website: string
 
+  @column()
+  declare is_private: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
