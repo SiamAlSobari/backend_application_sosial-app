@@ -47,4 +47,12 @@ export default class AuthController {
             message: 'User logged out successfully',
         })
     }
+
+    public async session({auth,response}:HttpContext) {
+        const user =auth.user!
+        response.status(200).json({
+            message: 'User session fetched successfully',
+            data: user
+        })
+    }
 }

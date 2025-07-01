@@ -34,6 +34,7 @@ router.group(() => {
     router.post('/register', [AuthController, 'register']).use(middleware.guest()),
     router.post('/login', [AuthController, 'login']).use(middleware.guest()),
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
+    router.get('/session', [AuthController, 'session']).use(middleware.auth())
   }).prefix('auth')
 
   // profile route
