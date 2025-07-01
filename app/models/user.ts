@@ -36,7 +36,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare profile: HasOne<typeof Profile>
 
   @hasMany(() => Post)
-  declare profiles: HasMany<typeof Post>
+  declare post: HasMany<typeof Post>
 
   @beforeCreate()
   public static async assignUuid(user: User) {

@@ -31,6 +31,7 @@ export class AuthService {
 
     public async login(payload:LoginPayload) {
         const user = await User.verifyCredentials(payload.email, payload.password)
+        await user.load('profile')
         if (!user) {
             throw new Error('User not found')
         }

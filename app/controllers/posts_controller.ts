@@ -1,5 +1,5 @@
 import Post from '#models/post'
-import { PostService } from '#services/post_service'
+import { PostService } from '#services/posts_service'
 import { createPostValidator } from '#validators/post'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'

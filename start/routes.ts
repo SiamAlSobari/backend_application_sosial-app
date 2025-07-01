@@ -32,14 +32,15 @@ router.group(() => {
   // auth route
   router.group(() => {
     router.post('/register', [AuthController, 'register']).use(middleware.guest()),
-    router.post('/login', [AuthController, 'login']).use(middleware.guest()),
+    router.post('/login', [AuthController, 'login']),
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
-    router.get('/session', [AuthController, 'session']).use(middleware.auth())
+    router.get('/session', [AuthController, 'getSession']).use(middleware.auth())
   }).prefix('auth')
 
   // profile route
   router.group(() => {
     router.get('/', [ProfilesController, 'getProfile']).use(middleware.auth())
+    router.get('/:id', [ProfilesController, 'getProfileUserId'])
     router.patch('/avatar', [ProfilesController, 'updateAvatarProfile']).use(middleware.auth())
     router.patch('/banner', [ProfilesController, 'updateBannerProfile']).use(middleware.auth())
   }).prefix('profiles')

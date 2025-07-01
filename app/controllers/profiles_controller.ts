@@ -20,6 +20,14 @@ export default class ProfilesController {
         })
     }
 
+    public async getProfileUserId({params,response}: HttpContext) {
+        const profile = await this.profilesService.getProfileByUserId(params.id)
+        response.status(200).json({
+            message: 'Profile fetched successfully',
+            data: profile
+        })
+    }
+
     public async updateAvatarProfile({request,auth,response}:HttpContext){
         const {avatar} = await request.validateUsing(updateAvatarProfileValidator)
         const profile = await this.profilesService.getProfileByUserId(auth.user!.id)
