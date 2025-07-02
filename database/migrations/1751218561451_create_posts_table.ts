@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.string('id').unique().notNullable().primary()
       table.string('caption').notNullable()
-      table.boolean('is_private').notNullable().defaultTo(false)
+      table.boolean('is_private').defaultTo(false)
       table.string('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
 
       table.timestamp('created_at')

@@ -30,19 +30,18 @@ export default class PostsController {
         const {page = '1', limit = '10'} = request.qs()
         const parsedPage = parseInt(page)
         const parsedLimit = parseInt(limit)
-        const posts = await Post.query().preload('media').preload('user').orderBy('created_at','desc').paginate(parsedPage,parsedLimit)
+        const posts = await Post.query().preload('media').preload('user',
+            (query) => {
+                query.preload('profile')
+            }
+        ).orderBy('created_at','desc').paginate(parsedPage,parsedLimit)
         response.status(200).json({
             message: 'Posts fetched successfully',
-            total_pages: posts.lastPage,
+            total_page: posts.lastPage,
             current_page:posts.currentPage,
             perPage:posts.perPage,
             total: posts.total,
             data: posts.toJSON()
         })
-        // const posts = await Post.query().preload('media')
-        // response.status(200).json({
-        //     message: 'Posts fetched successfully',
-        //     data: posts
-        // })
     }
 }
