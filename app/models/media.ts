@@ -20,7 +20,7 @@ export default class Media extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
   
-  @column()
+  @column({columnName: 'post_id'})
   declare postId: string
 
   @belongsTo(() => Post)

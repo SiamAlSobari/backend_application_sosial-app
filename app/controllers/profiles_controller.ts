@@ -14,6 +14,7 @@ export default class ProfilesController {
 
     public async getProfile({auth,response}: HttpContext) {
         const profile = await this.profilesService.getProfileByUserId(auth.user!.id)
+        await profile.load('user')
         response.status(200).json({
             message: 'Profile fetched successfully',
             data: profile

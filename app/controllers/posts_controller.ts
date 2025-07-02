@@ -13,7 +13,7 @@ export default class PostsController {
     public async createPost({request,auth,response}: HttpContext) {
         const payload = await request.validateUsing(createPostValidator)
         if (!payload.caption && (!payload.media || payload.media.length === 0)) {
-            response.badRequest({
+            return response.badRequest({
                 message: 'Caption or media is required'
             })
         }
@@ -30,14 +30,19 @@ export default class PostsController {
         const {page = '1', limit = '10'} = request.qs()
         const parsedPage = parseInt(page)
         const parsedLimit = parseInt(limit)
-        const posts = await Post.query().preload('media').paginate(parsedPage,parsedLimit)
+        const posts = await Post.query().preload('media').preload('user').orderBy('created_at','desc').paginate(parsedPage,parsedLimit)
         response.status(200).json({
             message: 'Posts fetched successfully',
             total_pages: posts.lastPage,
             current_page:posts.currentPage,
             perPage:posts.perPage,
             total: posts.total,
-            data: posts
+            data: posts.toJSON()
         })
+        // const posts = await Post.query().preload('media')
+        // response.status(200).json({
+        //     message: 'Posts fetched successfully',
+        //     data: posts
+        // })
     }
 }
