@@ -22,13 +22,18 @@ export default class Post extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @hasMany(() => Media)
+  @hasMany(() => Media, {
+    foreignKey: 'postId',
+    localKey: 'id',
+  })
   declare media: HasMany<typeof Media>
 
-  @column()
+  @column({ columnName: 'user_id' })
   declare userId: string
 
-  @belongsTo(() => User)
+  @belongsTo(() => User,{
+    foreignKey: 'userId'
+  })
   declare user: BelongsTo<typeof User>
 
   @beforeCreate()

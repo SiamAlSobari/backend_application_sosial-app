@@ -32,11 +32,23 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
-  @hasOne(() => Profile)
+  @hasOne(() => Profile, {
+    foreignKey: 'userId',
+    localKey: 'id',
+  })
   declare profile: HasOne<typeof Profile>
 
-  @hasMany(() => Post)
+  @hasMany(() => Post, {
+    foreignKey: 'userId',
+    localKey: 'id',
+  })
   declare post: HasMany<typeof Post>
+
+  @hasMany(() => Post, {
+    foreignKey: 'userId',
+    localKey: 'id',
+  })
+  declare posts: HasMany<typeof Post>
 
   @beforeCreate()
   public static async assignUuid(user: User) {
