@@ -16,8 +16,7 @@ export default class LikesController {
     }
 
     public async deleteLike({params,response}: HttpContext) {
-        const like = await Like.findOrFail(params.id)
-        await like.delete()
+        const like = await Like.query().where('post_id',params.id).delete()
         response.status(200).json({
             message: 'Like deleted successfully',
             data: like
