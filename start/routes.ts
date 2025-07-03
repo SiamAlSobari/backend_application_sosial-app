@@ -60,6 +60,7 @@ router.group(() => {
   // like route
   router.group(() => {
     router.post('/', [LikesController, 'createLike']).use(middleware.auth())
+    router.get('/:id', [LikesController, 'getLIkeByPostId'])
   }).prefix('likes')
 
 }).prefix('api/v1')

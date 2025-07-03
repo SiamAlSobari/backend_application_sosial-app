@@ -14,4 +14,12 @@ export default class LikesController {
             data: create
         })
     }
+
+    public async getLIkeByPostId({params,response}: HttpContext) {
+        const like = await Like.query().where('post_id',params.id).firstOrFail()
+        response.status(200).json({
+            message: 'Like fetched successfully',
+            data: like
+        })
+    }
 }
