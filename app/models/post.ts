@@ -40,4 +40,9 @@ export default class Post extends BaseModel {
   public static assignUuid(post: Post) {
     post.id = randomUUID()
   }
+
+  @beforeCreate()
+  public static makePublic(post: Post) {
+    post.is_private = false
+  }
 }

@@ -51,4 +51,9 @@ export default class Profile extends BaseModel {
   public static assignUuid(profile: Profile) {
     profile.id = randomUUID()
   }
+
+  @beforeCreate()
+  public static async makePublic(profile: Profile) {
+    profile.is_private = false
+  }
 }

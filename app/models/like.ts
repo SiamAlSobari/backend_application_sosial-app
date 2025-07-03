@@ -8,7 +8,6 @@ import User from './user.js'
 export default class Like extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
-
   
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
