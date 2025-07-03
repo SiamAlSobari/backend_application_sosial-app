@@ -61,6 +61,7 @@ router.group(() => {
   router.group(() => {
     router.post('/', [LikesController, 'createLike']).use(middleware.auth())
     router.get('/:id', [LikesController, 'getLIkeByPostId'])
+    router.delete('/:id', [LikesController, 'deleteLike']).use(middleware.auth())
   }).prefix('likes')
 
 }).prefix('api/v1')
