@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Media from './media.js'
 import User from './user.js'
+import Like from './like.js'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -36,10 +37,17 @@ export default class Post extends BaseModel {
   })
   declare user: BelongsTo<typeof User>
 
+  @hasMany(() => Like, {
+    foreignKey: 'postId',
+    localKey: 'id',
+  })
+  declare like: HasMany<typeof Like>
+
   @beforeCreate()
   public static assignUuid(post: Post) {
     post.id = randomUUID()
   }
+
 
   @beforeCreate()
   public static makePublic(post: Post) {

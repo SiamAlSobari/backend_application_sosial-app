@@ -6,7 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.string('id').unique().notNullable().primary()
-      table.string('caption').notNullable()
+      table.text('caption').notNullable()
       table.boolean('is_private').defaultTo(false)
       table.string('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
 

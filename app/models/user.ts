@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto'
 import Profile from './profile.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Post from './post.js'
+import Like from './like.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -49,6 +50,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
     localKey: 'id',
   })
   declare posts: HasMany<typeof Post>
+
+  @hasMany(()=> Like, {
+    foreignKey: 'userId',
+    localKey: 'id'
+  })
+  declare like: HasMany<typeof Like>
 
   @beforeCreate()
   public static async assignUuid(user: User) {
