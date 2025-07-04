@@ -43,6 +43,7 @@ export default class Comment extends BaseModel {
   })
   declare children: HasMany<typeof Comment>
 
+  //create uuId for comment id
   @beforeCreate()
   public static assignUuid(comment: Comment) {
     comment.id = randomUUID()
