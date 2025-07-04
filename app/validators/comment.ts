@@ -6,3 +6,11 @@ export const commentRootValidator = vine.compile(
         comment: vine.string()
     })
 )
+
+export const commentReplyValidator = vine.compile(
+    vine.object({
+        commentId: vine.string(),
+        comment: vine.string(),
+        postId: vine.string()
+    })
+)

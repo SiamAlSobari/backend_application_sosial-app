@@ -1,5 +1,5 @@
 import Comment from '#models/comment'
-import { commentRootValidator } from '#validators/comment'
+import { commentReplyValidator, commentRootValidator } from '#validators/comment'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CommentsController {
@@ -10,6 +10,20 @@ export default class CommentsController {
             postId: payload.postId,
             userId: auth.user!.id,
             parentId: null
+        })
+        response.status(201).json({
+            message: 'Comment created successfully',
+            data: create
+        })
+    }
+
+    public async createReplyComment({request,response,auth}: HttpContext) {
+        const payload = await request.validateUsing(commentReplyValidator)
+        const create = await Comment.create({
+            comment: payload.comment,
+            postId: payload.postId,
+            userId: auth.user!.id,
+            parentId: payload.commentId
         })
         response.status(201).json({
             message: 'Comment created successfully',
