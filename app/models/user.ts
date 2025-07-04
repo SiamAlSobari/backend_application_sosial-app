@@ -8,6 +8,7 @@ import Profile from './profile.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Post from './post.js'
 import Like from './like.js'
+import Comment from './comment.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -33,29 +34,33 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
+  // Relation to Profile
   @hasOne(() => Profile, {
     foreignKey: 'userId',
     localKey: 'id',
   })
   declare profile: HasOne<typeof Profile>
 
-  @hasMany(() => Post, {
-    foreignKey: 'userId',
-    localKey: 'id',
-  })
-  declare post: HasMany<typeof Post>
 
+  // Relation to Post
   @hasMany(() => Post, {
     foreignKey: 'userId',
     localKey: 'id',
   })
   declare posts: HasMany<typeof Post>
 
+  // Relation to Like
   @hasMany(()=> Like, {
     foreignKey: 'userId',
     localKey: 'id'
   })
-  declare like: HasMany<typeof Like>
+  declare likes: HasMany<typeof Like>
+
+  @hasMany(()=> Comment, {
+    foreignKey: 'userId',
+    localKey: 'id'
+  })
+  declare comments: HasMany<typeof Comment>
 
   @beforeCreate()
   public static async assignUuid(user: User) {

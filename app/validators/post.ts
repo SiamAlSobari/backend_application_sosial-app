@@ -6,7 +6,7 @@ export const createPostValidator = vine.compile(
         media: vine.array(
             vine.file({
                 size: '300mb',
-                extnames: ['jpg', 'png', 'jpeg', 'webp', 'mp4', 'mov']
+                extnames: ['jpg', 'png', 'jpeg', 'webp']
             })
         ).optional()
     })
