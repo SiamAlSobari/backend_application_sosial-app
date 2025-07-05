@@ -69,6 +69,7 @@ router.group(() => {
     router.post('/root', [CommentsController, 'createRootComment']).use(middleware.auth())
     router.post('/reply', [CommentsController, 'createReplyComment']).use(middleware.auth())
     router.get('/:id', [CommentsController, 'getNestedCommentByPostId'])
+    router.get('/count/:id', [CommentsController, 'getCommentCountByPostId'])
   }).prefix('comments')
 
 }).prefix('api/v1')

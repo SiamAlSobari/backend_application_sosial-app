@@ -32,7 +32,9 @@ export default class CommentsController {
     }
 
     public async getNestedCommentByPostId({response,params}:HttpContext){
-        const comments = await Comment.query().where('post_id',params.id).orderBy('created_at','desc').preload('user')
+        const comments = await Comment.query().where('post_id',params.id).orderBy('created_at','desc').preload('user',(query) => {
+            query.preload('profile')
+        })
 
         function buildTree(comments:Comment[],parent_id : string | null = null):any{
             return comments
@@ -51,6 +53,15 @@ export default class CommentsController {
         response.status(200).json({
             message: 'Comments fetched successfully',
             data: nested
+        })
+    }
+
+    public async getCommentCountByPostId({response,params}:HttpContext){
+        const count = await Comment.query().where('post_id',params.id).count("* as total")
+        const parsing = Number(count[0].$extras.total)
+        response.status(200).json({
+            message: 'Comments count fetched successfully',
+            data: parsing
         })
     }
 }

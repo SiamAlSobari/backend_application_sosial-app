@@ -34,7 +34,8 @@ export default class PostsController {
             (query) => {
                 query.preload('profile')
             }
-        ).preload('likes').orderBy('created_at','desc').paginate(parsedPage,parsedLimit)
+        ).orderBy('created_at','desc').paginate(parsedPage,parsedLimit)
+        
         response.status(200).json({
             message: 'Posts fetched successfully',
             total_page: posts.lastPage,
