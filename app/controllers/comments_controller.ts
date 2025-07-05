@@ -30,4 +30,27 @@ export default class CommentsController {
             data: create
         })
     }
+
+    public async getNestedCommentByPostId({response,params}:HttpContext){
+        const comments = await Comment.query().where('post_id',params.id).orderBy('created_at','desc').preload('user')
+
+        function buildTree(comments:Comment[],parent_id : string | null = null):any{
+            return comments
+            //filter commertar yang parentId nya null
+            .filter((comment:Comment)=> comment.parentId === parent_id)
+            //lakukan mapping untuk menyusun tree comments
+            .map((comment:Comment)=>({
+                //ubah instance comment menjadi object biasa
+                ...comment.serialize(),
+                //rekursif untuk membangun tree
+                replies: buildTree(comments,comment.id)
+            }))
+        }
+
+        const nested = buildTree(comments)
+        response.status(200).json({
+            message: 'Comments fetched successfully',
+            data: nested
+        })
+    }
 }
