@@ -41,7 +41,7 @@ router.group(() => {
   // profile route
   router.group(() => {
     router.get('/', [ProfilesController, 'getProfile']).use(middleware.auth())
-    router.get('/:id', [ProfilesController, 'getProfileUserId'])
+    router.get('/:id', [ProfilesController, 'getProfileByParam'])
     router.patch('/avatar', [ProfilesController, 'updateAvatarProfile']).use(middleware.auth())
     router.patch('/banner', [ProfilesController, 'updateBannerProfile']).use(middleware.auth())
   }).prefix('profiles')

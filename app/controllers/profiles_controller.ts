@@ -1,4 +1,5 @@
 import { getBaseUrl } from '#config/filename'
+import Profile from '#models/profile'
 import { ProfilesService } from '#services/profiles_service'
 import { updateAvatarProfileValidator, updateBannerProfileValidator } from '#validators/profile'
 import { inject } from '@adonisjs/core'
@@ -21,8 +22,8 @@ export default class ProfilesController {
         })
     }
 
-    public async getProfileUserId({params,response}: HttpContext) {
-        const profile = await this.profilesService.getProfileByUserId(params.id)
+    public async getProfileByParam({params,response}: HttpContext) {
+        const profile = await Profile.query().where('id',params.id).first()
         response.status(200).json({
             message: 'Profile fetched successfully',
             data: profile
