@@ -17,6 +17,7 @@ import PostsController from '#controllers/posts_controller'
 import MediaController from '#controllers/media_controller'
 import LikesController from '#controllers/likes_controller'
 import CommentsController from '#controllers/comments_controller'
+import BookmarksController from '#controllers/bookmarks_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -73,6 +74,21 @@ router.group(() => {
     router.get('/count/:id', [CommentsController, 'getCommentCountByPostId'])
   }).prefix('comments')
 
+  //notification route
+  router.group(()=>{
+    //notification
+  }).prefix('notifications')
+
+  //bookmark route
+  router.group(()=>{
+    router.post('/',[BookmarksController,'createPostBookmark'])
+    router.delete('/:id',[BookmarksController,'deletePostBookmark'])
+    router.get('/',[BookmarksController,'getBookmark'])
+  }).prefix('bookmarks').use(middleware.auth())
+
+  //
+
+  //endpoints
 }).prefix('api/v1')
 
 
