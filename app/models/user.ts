@@ -9,6 +9,7 @@ import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Post from './post.js'
 import Like from './like.js'
 import Comment from './comment.js'
+import Notification from './notification.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -61,6 +62,20 @@ export default class User extends compose(BaseModel, AuthFinder) {
     localKey: 'id'
   })
   declare comments: HasMany<typeof Comment>
+
+  // Relation Sender to Nofication
+  @hasMany(()=>Notification, {
+    foreignKey: 'senderId',
+    localKey: 'id'
+  })
+  declare sentNotifications: HasMany<typeof Notification>
+
+  // Relation Receiver to Nofication
+  @hasMany(()=>Notification, {
+    foreignKey: 'receiverId',
+    localKey: 'id'
+  })
+  declare receivedNotifications: HasMany<typeof Notification>
 
   @beforeCreate()
   public static async assignUuid(user: User) {
