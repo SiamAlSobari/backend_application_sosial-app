@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('receiver_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
       table.enum('type', ['like', 'comment', 'follow', 'comment_reply', 'accepted_friend_request', 'rejected_friend_request', 'friend_request']).notNullable()
       table.boolean('is_read').defaultTo(false)
-      
+      table.text('message').notNullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

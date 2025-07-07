@@ -1,5 +1,6 @@
 import Like from '#models/like'
 import Notification from '#models/notification'
+import Profile from '#models/profile'
 import { likeValidator } from '#validators/like'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -10,13 +11,15 @@ export default class LikesController {
             postId: payload.postId,
             userId: auth.user!.id
         })
+        const profile = await Profile.query().where('user_id',auth.user!.id).firstOrFail()
         // mencegah notification di like sendiri, jika userId yang login tidak sama dengan receiver maka jalankan notification
         if (auth.user!.id !== payload.receiverId) {
             await Notification.create({
                 type: 'like',
                 senderId: auth.user!.id,
                 receiverId: payload.receiverId,
-                isRead: false
+                isRead: false,
+                message:`${profile.name} menyukai postingan anda`
             })
         }
 

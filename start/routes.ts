@@ -33,7 +33,7 @@ router.group(() => {
   // auth route
   router.group(() => {
     router.post('/register', [AuthController, 'register']).use(middleware.guest()),
-    router.post('/login', [AuthController, 'login']).use(middleware.guest()),
+    router.post('/login', [AuthController, 'login']),
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
     router.get('/session', [AuthController, 'getSession']).use(middleware.auth())
   }).prefix('auth')
