@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { randomUUID } from 'crypto'
 
 export default class Notification extends BaseModel {
   @column({ isPrimary: true })
@@ -9,6 +10,9 @@ export default class Notification extends BaseModel {
 
   @column()
   declare type:'like' | 'comment' | 'friend_request' | 'comment_reply' | 'accepted_friend_request' | 'rejected_friend_request'
+
+  @column({columnName: 'is_read'})
+  declare isRead: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -27,5 +31,10 @@ export default class Notification extends BaseModel {
   declare receiverId: string
   @belongsTo(() => User, { foreignKey: 'receiverId' })
   declare receiver: BelongsTo<typeof User>
+
+  @beforeCreate()
+  public static assignUuid(notification: Notification) {
+    notification.id = randomUUID()
+  }
 
 }
