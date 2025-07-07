@@ -13,5 +13,6 @@ export const commentReplyValidator = vine.compile(
         commentId: vine.string(),
         comment: vine.string(),
         postId: vine.string(),
+        receiverId: vine.string()
     })
 )

@@ -38,6 +38,17 @@ export default class CommentsController {
             userId: auth.user!.id,
             parentId: payload.commentId
         })
+        const profile = await Profile.query().where('user_id',auth.user!.id).firstOrFail()
+        //mencegah notification di like sendiri, jika userId yang login tidak sama dengan receiver maka jalankan notification
+        if (auth.user!.id !== payload.receiverId) {
+            await Notification.create({
+                type: 'comment_reply',
+                senderId: auth.user!.id,
+                receiverId: payload.receiverId,
+                isRead: false,
+                message:`${profile.name} menjawab komentar anda : ${payload.comment}`
+            })
+        }
         response.status(201).json({
             message: 'Comment created successfully',
             data: create
