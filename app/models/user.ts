@@ -10,6 +10,7 @@ import Post from './post.js'
 import Like from './like.js'
 import Comment from './comment.js'
 import Notification from './notification.js'
+import Bookmark from './bookmark.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -76,6 +77,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
     localKey: 'id'
   })
   declare receivedNotifications: HasMany<typeof Notification>
+
+  //Relation to Bookmark
+  @hasMany(()=>Bookmark, {
+    foreignKey: 'userId',
+    localKey: 'id'
+  })
+  declare bookmarks: HasMany<typeof Bookmark>
 
   @beforeCreate()
   public static async assignUuid(user: User) {

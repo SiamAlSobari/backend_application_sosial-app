@@ -6,6 +6,7 @@ import Media from './media.js'
 import User from './user.js'
 import Like from './like.js'
 import Comment from './comment.js'
+import Bookmark from './bookmark.js'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -51,6 +52,13 @@ export default class Post extends BaseModel {
     localKey: 'id',
   })
   declare comments: HasMany<typeof Comment>
+
+  // Relations to Bookmark
+  @hasMany(() => Bookmark, {
+    foreignKey: 'postId',
+    localKey: 'id',
+  })
+  declare bookmarks: HasMany<typeof Bookmark>
 
   @beforeCreate()
   public static assignUuid(post: Post) {
