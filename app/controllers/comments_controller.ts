@@ -1,4 +1,6 @@
 import Comment from '#models/comment'
+import Notification from '#models/notification'
+import Profile from '#models/profile'
 import { commentReplyValidator, commentRootValidator } from '#validators/comment'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -11,6 +13,17 @@ export default class CommentsController {
             userId: auth.user!.id,
             parentId: null
         })
+        const profile = await Profile.query().where('user_id',auth.user!.id).firstOrFail()
+        // mencegah notification di like sendiri, jika userId yang login tidak sama dengan receiver maka jalankan notification
+        if (auth.user!.id !== payload.receiverId) {
+            await Notification.create({
+                type: 'comment',
+                senderId: auth.user!.id,
+                receiverId: payload.receiverId,
+                isRead: false,
+                message:`${profile.name} mengomentari postingan anda : ${payload.comment}`
+            })
+        }
         response.status(201).json({
             message: 'Comment created successfully',
             data: create
