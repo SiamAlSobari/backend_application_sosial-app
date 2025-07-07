@@ -1,4 +1,5 @@
 import Post from '#models/post'
+import Profile from '#models/profile'
 import { PostService } from '#services/posts_service'
 import { createPostValidator } from '#validators/post'
 import { inject } from '@adonisjs/core'
@@ -31,6 +32,28 @@ export default class PostsController {
         const parsedPage = parseInt(page)
         const parsedLimit = parseInt(limit)
         const posts = await Post.query().preload('media').preload('user',
+            (query) => {
+                query.preload('profile')
+            }
+        ).orderBy('created_at','desc').paginate(parsedPage,parsedLimit)
+        
+        response.status(200).json({
+            message: 'Posts fetched successfully',
+            total_page: posts.lastPage,
+            current_page:posts.currentPage,
+            perPage:posts.perPage,
+            total: posts.total,
+            data: posts.toJSON()
+        })
+    }
+
+    public async getPostByParams({params,response,request}:HttpContext){
+        const profile = await Profile.findByOrFail('id',params.id)
+        const userId = profile.userId
+        const {page = '1', limit = '10'} = request.qs()
+        const parsedPage = parseInt(page)
+        const parsedLimit = parseInt(limit)
+        const posts = await Post.query().where('user_id',userId).preload('media').preload('user',
             (query) => {
                 query.preload('profile')
             }

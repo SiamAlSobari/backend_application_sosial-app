@@ -50,6 +50,7 @@ router.group(() => {
   router.group(() => {
     router.post('/', [PostsController, 'createPost']).use(middleware.auth())
     router.get('/', [PostsController, 'getPosts'])
+    router.get('/params/:id', [PostsController, 'getPostByParams'])
   }).prefix('posts')
 
   // media route
