@@ -26,6 +26,14 @@ export default class BookmarksController {
 
     public async getBookmark({auth,response}: HttpContext) {
         const bookmark = await Bookmark.query().where('user_id',auth.user!.id)
+        .preload('post',(query) => {
+            query.preload('media')
+            query.preload('user',
+                (query) => {
+                    query.preload('profile')
+                }
+            )
+        })
         response.status(200).json({
             message: 'Bookmark fetched successfully',
             data: bookmark
