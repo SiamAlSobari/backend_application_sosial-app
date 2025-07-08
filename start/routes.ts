@@ -84,6 +84,7 @@ router.group(() => {
     router.post('/',[BookmarksController,'createPostBookmark'])
     router.delete('/:id',[BookmarksController,'deletePostBookmark'])
     router.get('/',[BookmarksController,'getBookmark'])
+    router.get('/post/:id',[BookmarksController,'getBookmarkByPostId'])
   }).prefix('bookmarks').use(middleware.auth())
 
   //

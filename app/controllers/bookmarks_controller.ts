@@ -31,4 +31,12 @@ export default class BookmarksController {
             data: bookmark
         })
     }
+
+    public async getBookmarkByPostId({params,response,auth}:HttpContext){
+        const bookmark = await Bookmark.query().where('user_id',auth.user!.id).where('post_id',params.id).first()
+        response.status(200).json({
+            message: 'Bookmark fetched successfully',
+            data: bookmark
+        })
+    }
 }
