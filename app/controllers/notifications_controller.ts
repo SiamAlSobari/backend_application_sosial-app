@@ -32,7 +32,6 @@ export default class NotificationsController {
   public async getAllNotifications({ response, auth }: HttpContext) {
     const notification = await Notification.query()
       .where('receiver_id', auth.user!.id)
-      .where('is_read', false)
       .orderBy('created_at', 'desc')
       .preload('sender', (query) => {
         query.preload('profile')
