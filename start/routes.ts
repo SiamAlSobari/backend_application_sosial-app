@@ -18,6 +18,7 @@ import MediaController from '#controllers/media_controller'
 import LikesController from '#controllers/likes_controller'
 import CommentsController from '#controllers/comments_controller'
 import BookmarksController from '#controllers/bookmarks_controller'
+import NotificationsController from '#controllers/notifications_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -76,8 +77,8 @@ router.group(() => {
 
   //notification route
   router.group(()=>{
-    //notification
-  }).prefix('notifications')
+    router.get('/some',[NotificationsController,'getSomeNotifications'])
+  }).prefix('notifications').use(middleware.auth())
 
   //bookmark route
   router.group(()=>{
