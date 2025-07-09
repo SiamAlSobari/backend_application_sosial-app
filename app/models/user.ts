@@ -11,6 +11,7 @@ import Like from './like.js'
 import Comment from './comment.js'
 import Notification from './notification.js'
 import Bookmark from './bookmark.js'
+import FollowRequest from './follow_request.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -84,6 +85,20 @@ export default class User extends compose(BaseModel, AuthFinder) {
     localKey: 'id'
   })
   declare bookmarks: HasMany<typeof Bookmark>
+
+  // Relation sender to FollowRequest
+  @hasMany(() => FollowRequest, {
+    foreignKey: 'senderId',
+    localKey: 'id',
+  })
+  declare sentFollowRequests: HasMany<typeof FollowRequest>
+
+  // Relation receiver to FollowRequest
+  @hasMany(() => FollowRequest, {
+    foreignKey: 'receiverId',
+    localKey: 'id',
+  })
+  declare receivedFollowRequests: HasMany<typeof FollowRequest>
 
   @beforeCreate()
   public static async assignUuid(user: User) {
