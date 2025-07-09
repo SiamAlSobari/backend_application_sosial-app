@@ -79,6 +79,8 @@ router.group(() => {
   router.group(()=>{
     router.get('/some',[NotificationsController,'getSomeNotifications'])
     router.get('/count',[NotificationsController,'getCountIsReadFalseNotifications'])
+    router.get('/',[NotificationsController,'getAllNotifications'])
+    router.patch('/',[NotificationsController,'updateAllNotifications'])
   }).prefix('notifications').use(middleware.auth())
 
   //bookmark route
@@ -88,8 +90,6 @@ router.group(() => {
     router.get('/',[BookmarksController,'getBookmark'])
     router.get('/post/:id',[BookmarksController,'getBookmarkByPostId'])
   }).prefix('bookmarks').use(middleware.auth())
-
-  //
 
   //endpoints
 }).prefix('api/v1')

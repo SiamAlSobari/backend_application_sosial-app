@@ -28,4 +28,29 @@ export default class NotificationsController {
       data: parsing,
     })
   }
+
+  public async getAllNotifications({ response, auth }: HttpContext) {
+    const notification = await Notification.query()
+      .where('receiver_id', auth.user!.id)
+      .where('is_read', false)
+      .orderBy('created_at', 'desc')
+      .preload('sender', (query) => {
+        query.preload('profile')
+      })
+    response.status(200).json({
+      message: 'Notifications fetched successfully',
+      data: notification,
+    })
+  }
+
+  public async updateAllNotifications({ response, auth }: HttpContext) {
+    const notification = await Notification.query()
+      .where('receiver_id', auth.user!.id)
+      .where('is_read', false)
+      .update({ is_read: true })
+    response.status(200).json({
+      message: 'Notifications updated successfully',
+      data: notification,
+    })
+  }
 }
