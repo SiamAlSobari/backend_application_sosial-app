@@ -11,6 +11,7 @@ export default class LikesController {
             postId: payload.postId,
             userId: auth.user!.id
         })
+        
         const profile = await Profile.query().where('user_id',auth.user!.id).firstOrFail()
         // mencegah notification di like sendiri, jika userId yang login tidak sama dengan receiver maka jalankan notification
         if (auth.user!.id !== payload.receiverId) {
@@ -29,8 +30,8 @@ export default class LikesController {
         })
     }
 
-    public async deleteLike({params,response}: HttpContext) {
-        const like = await Like.query().where('post_id',params.id).delete()
+    public async deleteLike({params,response,auth}: HttpContext) {
+        const like = await Like.query().where('post_id',params.id).where('user_id',auth.user!.id).delete()
         response.status(200).json({
             message: 'Like deleted successfully',
             data: like
