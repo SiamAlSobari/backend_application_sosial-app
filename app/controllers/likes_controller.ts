@@ -7,11 +7,17 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class LikesController {
     public async createLike({request,response,auth}: HttpContext) {
         const payload = await request.validateUsing(likeValidator)
+        const existingLike = await Like.query().where('post_id',payload.postId).where('user_id',auth.user!.id).first()
+        if (existingLike) {
+            return response.badRequest({
+                message: 'You have already liked this post'
+            })
+        }
         const create = await Like.create({
             postId: payload.postId,
             userId: auth.user!.id
         })
-        
+
         const profile = await Profile.query().where('user_id',auth.user!.id).firstOrFail()
         // mencegah notification di like sendiri, jika userId yang login tidak sama dengan receiver maka jalankan notification
         if (auth.user!.id !== payload.receiverId) {
