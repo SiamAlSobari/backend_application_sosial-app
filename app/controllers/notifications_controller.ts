@@ -16,4 +16,16 @@ export default class NotificationsController {
       data: notification,
     })
   }
+
+  public async getCountIsReadFalseNotifications({ response, auth }: HttpContext) {
+    const count = await Notification.query()
+      .where('receiver_id', auth.user!.id)
+      .where('is_read', false)
+      .count('* as total')
+    const parsing = Number(count[0].$extras.total)
+    response.status(200).json({
+      message: 'Notifications count fetched successfully',
+      data: parsing,
+    })
+  }
 }

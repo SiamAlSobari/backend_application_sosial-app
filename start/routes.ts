@@ -78,6 +78,7 @@ router.group(() => {
   //notification route
   router.group(()=>{
     router.get('/some',[NotificationsController,'getSomeNotifications'])
+    router.get('/count',[NotificationsController,'getCountIsReadFalseNotifications'])
   }).prefix('notifications').use(middleware.auth())
 
   //bookmark route
