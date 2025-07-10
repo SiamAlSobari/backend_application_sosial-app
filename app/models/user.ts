@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, beforeCreate, column, hasMany, hasOne} from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { randomUUID } from 'crypto'
 import Profile from './profile.js'
@@ -45,7 +45,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare profile: HasOne<typeof Profile>
 
-
   // Relation to Post
   @hasMany(() => Post, {
     foreignKey: 'userId',
@@ -54,36 +53,36 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare posts: HasMany<typeof Post>
 
   // Relation to Like
-  @hasMany(()=> Like, {
+  @hasMany(() => Like, {
     foreignKey: 'userId',
-    localKey: 'id'
+    localKey: 'id',
   })
   declare likes: HasMany<typeof Like>
 
-  @hasMany(()=> Comment, {
+  @hasMany(() => Comment, {
     foreignKey: 'userId',
-    localKey: 'id'
+    localKey: 'id',
   })
   declare comments: HasMany<typeof Comment>
 
   // Relation Sender to Nofication
-  @hasMany(()=>Notification, {
+  @hasMany(() => Notification, {
     foreignKey: 'senderId',
-    localKey: 'id'
+    localKey: 'id',
   })
   declare sentNotifications: HasMany<typeof Notification>
 
   // Relation Receiver to Nofication
-  @hasMany(()=>Notification, {
+  @hasMany(() => Notification, {
     foreignKey: 'receiverId',
-    localKey: 'id'
+    localKey: 'id',
   })
   declare receivedNotifications: HasMany<typeof Notification>
 
   //Relation to Bookmark
-  @hasMany(()=>Bookmark, {
+  @hasMany(() => Bookmark, {
     foreignKey: 'userId',
-    localKey: 'id'
+    localKey: 'id',
   })
   declare bookmarks: HasMany<typeof Bookmark>
 
@@ -101,24 +100,20 @@ export default class User extends compose(BaseModel, AuthFinder) {
   })
   declare receivedFollowRequests: HasMany<typeof FollowRequest>
 
-
-  // Relation to follower 
-  @hasMany(()=> Follower,{
-    foreignKey: 'followerId',
-    localKey: 'id'
+  @hasMany(() => Follower, {
+    foreignKey: 'followingId', // saya yang diikuti
+    localKey: 'id',
   })
   declare followers: HasMany<typeof Follower>
 
-  
-  //relation to following
-  @hasMany(()=> Follower,{
-    foreignKey: 'followingId',
-    localKey: 'id'
+  @hasMany(() => Follower, {
+    foreignKey: 'followerId', // saya sebagai pelaku follow
+    localKey: 'id',
   })
   declare following: HasMany<typeof Follower>
 
   @beforeCreate()
   public static async assignUuid(user: User) {
-    user.id =randomUUID()
+    user.id = randomUUID()
   }
 }

@@ -20,6 +20,7 @@ import CommentsController from '#controllers/comments_controller'
 import BookmarksController from '#controllers/bookmarks_controller'
 import NotificationsController from '#controllers/notifications_controller'
 import UsersController from '#controllers/users_controller'
+import FollowRequestsController from '#controllers/follow_requests_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -43,7 +44,7 @@ router.group(() => {
 
   // user route
   router.group(()=>{
-    router.get('/not-follower',[UsersController,"getAllUsersNotFollowing"])
+    router.get('/not-follower',[UsersController,"getUsersNotFollowing"])
   }).prefix('users').use(middleware.auth())
 
   // profile route
@@ -96,6 +97,11 @@ router.group(() => {
     router.get('/',[BookmarksController,'getBookmark'])
     router.get('/post/:id',[BookmarksController,'getBookmarkByPostId'])
   }).prefix('bookmarks').use(middleware.auth())
+
+  //follow-request route
+  router.group(()=>{
+    router.post('/',[FollowRequestsController,'createFollowRequest'])
+  }).prefix('follow-requests').use(middleware.auth())
 
   //endpoints
 }).prefix('api/v1')
