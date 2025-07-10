@@ -1,4 +1,5 @@
  import FollowRequest from '#models/follow_request'
+import Follower from '#models/follower'
 import Notification from '#models/notification'
 import Profile from '#models/profile'
 import { followRequestValidator } from '#validators/follow_request'
@@ -12,6 +13,7 @@ export default class FollowRequestsController {
             senderId: auth.user!.id,
             receiverId: payload.receiverId
         })
+        //mencegah notification di like sendiri, jika userId yang login tidak sama dengan receiver maka jalankan notification
         if (auth.user!.id !== payload.receiverId) {
             await Notification.create({
                 type: 'follow_request',
@@ -21,6 +23,11 @@ export default class FollowRequestsController {
                 message:`${profile.name} meminta follow anda`
             })
         }
+        //create follower dimana auth.user!.id melakukan follow ke payload.receiverId/user yang di follow
+        await Follower.create({
+            followerId: auth.user!.id,
+            followingId: payload.receiverId
+        })
         response.status(201).json({
             message: 'Follow request created successfully',
             data: create

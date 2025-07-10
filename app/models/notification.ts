@@ -9,7 +9,7 @@ export default class Notification extends BaseModel {
   declare id: string
 
   @column()
-  declare type:'like' | 'comment' | 'follow_request' | 'comment_reply' | 'accepted_follow_request' | 'rejected_follow_request'
+  declare type:'like' | 'comment' | 'follow_request' | 'comment_reply' | 'follow_back'
 
   @column({columnName: 'is_read'})
   declare isRead: boolean

@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.string('id').notNullable().primary().unique()
       table.string('sender_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
       table.string('receiver_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
-      table.enum('type', ['like', 'comment', 'follow', 'comment_reply', 'accepted_friend_request', 'rejected_friend_request', 'friend_request']).notNullable()
+      table.enum('type', ['like', 'comment', 'follow_request', 'comment_reply', 'follow_back',]).notNullable()
       table.boolean('is_read').defaultTo(false)
       table.text('message').notNullable()
       table.timestamp('created_at')
