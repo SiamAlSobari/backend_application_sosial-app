@@ -2,7 +2,8 @@ import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
-    public async getAllUsers({response,auth}: HttpContext) {
+    public async getAllUsersNotFollowing({response,auth}: HttpContext) {
+        //mencari user selain saya dan selain yg belum saya follow
         const user = await User.query().whereNot('id',auth.user!.id).preload('profile').whereDoesntHave('followers', (query) => {
             query.where('follower_id', auth.user!.id)
         }).preload('profile')

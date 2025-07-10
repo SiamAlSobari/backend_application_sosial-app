@@ -19,6 +19,7 @@ import LikesController from '#controllers/likes_controller'
 import CommentsController from '#controllers/comments_controller'
 import BookmarksController from '#controllers/bookmarks_controller'
 import NotificationsController from '#controllers/notifications_controller'
+import UsersController from '#controllers/users_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -39,6 +40,11 @@ router.group(() => {
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
     router.get('/session', [AuthController, 'getSession']).use(middleware.auth())
   }).prefix('auth')
+
+  // user route
+  router.group(()=>{
+    router.get('/not-follower',[UsersController,"getAllUsersNotFollowing"])
+  }).prefix('users').use(middleware.auth())
 
   // profile route
   router.group(() => {
