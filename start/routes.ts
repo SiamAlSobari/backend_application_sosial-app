@@ -21,6 +21,7 @@ import BookmarksController from '#controllers/bookmarks_controller'
 import NotificationsController from '#controllers/notifications_controller'
 import UsersController from '#controllers/users_controller'
 import FollowRequestsController from '#controllers/follow_requests_controller'
+import FollowersController from '#controllers/followers_controller'
 
 
 const PATH_TRAVERSAL_REGEX = /(?:^|[\\/])\.\.(?:[\\/]|$)/
@@ -102,6 +103,13 @@ router.group(() => {
   router.group(()=>{
     router.post('/',[FollowRequestsController,'createFollowRequest'])
   }).prefix('follow-requests').use(middleware.auth())
+
+  //follower route
+  router.group(()=>{
+    router.get('/following',[FollowersController,'getFollowingMe'])
+    router.get('/followed',[FollowersController,'getMyFollowing'])
+  }).prefix('followers').use(middleware.auth())
+
 
   //endpoints
 }).prefix('api/v1')
