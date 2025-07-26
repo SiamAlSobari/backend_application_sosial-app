@@ -37,7 +37,7 @@ router.get('/', async () => {
 router.group(() => {
   // auth route
   router.group(() => {
-    router.post('/register', [AuthController, 'register']).use(middleware.guest()),
+    router.post('/register', [AuthController, 'register']),
     router.post('/login', [AuthController, 'login']),
     router.post('/logout', [AuthController, 'logout']).use(middleware.auth())
     router.get('/session', [AuthController, 'getSession']).use(middleware.auth())
